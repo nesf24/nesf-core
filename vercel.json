@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "name": "nesf-core",
+  "public": false,
+  "builds": [
+    {
+      "src": "app/build/web",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app/build/web/index.html"
+    }
+  ],
+  "env": {
+    "API_BASE": "https://app.nesportsfoundation.in"
+  },
+  "github": {
+    "enabled": true,
+    "autoAlias": true,
+    "autoJobCancelation": true
+  }
+}

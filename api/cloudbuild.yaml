@@ -1,0 +1,43 @@
+# Cloud Build for the NESF Core API. Mirrors the thenesports-api pipeline:
+# same region, same Artifact Registry repo, same Cloud SQL instance.
+#
+# Run `npm run build:web` before submitting so ./public holds the Flutter build
+# and one service can serve app.nesportsfoundation.in end to end.
+substitutions:
+  _REGION: asia-south1
+  _SERVICE: nesf-core-api
+  _SQL_INSTANCE: thenesports-api-prod:asia-south1:thenesports-db
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/${_SERVICE}:$COMMIT_SHA'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/${_SERVICE}:$COMMIT_SHA'
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - '${_SERVICE}'
+      - '--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/${_SERVICE}:$COMMIT_SHA'
+      - '--region=${_REGION}'
+      - '--add-cloudsql-instances=${_SQL_INSTANCE}'
+      # Staff sign in inside the app, so the service itself is public.
+      - '--allow-unauthenticated'
+      # Secrets (JWT_SECRET, DB_PASSWORD) come from Secret Manager, never from
+      # this file — see DEPLOYMENT.md.
+      - '--quiet'
+
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/${_SERVICE}:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

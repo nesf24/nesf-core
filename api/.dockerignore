@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+.env
+.env.*
+!.env.example
+
+# Locally-stored selfies, signatures and receipts. Production uses Cloud Storage
+# (STORAGE_DRIVER=gcs) because the Cloud Run filesystem is ephemeral.
+uploads
+
+.git
+.gitignore
+*.md

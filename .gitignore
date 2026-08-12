@@ -1,0 +1,37 @@
+# --- secrets ---
+.env
+.env.local
+.env.production
+*.jks
+*.keystore
+key.properties
+
+# --- api ---
+node_modules/
+npm-debug.log*
+# Locally-stored selfies, signatures and receipts (production uses Cloud Storage)
+api/uploads/
+# The Flutter web build, copied in by `npm run build:web`
+api/public/
+
+# --- flutter ---
+app/.dart_tool/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/build/
+app/ios/Pods/
+app/ios/Flutter/Flutter.framework
+app/ios/Flutter/Generated.xcconfig
+app/ios/Flutter/flutter_export_environment.sh
+app/android/.gradle/
+app/android/local.properties
+app/android/app/debug/
+app/android/app/profile/
+app/android/app/release/
+
+# --- os / editor ---
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "env": {
+    "DATABASE_URL": "postgres://postgres:NEsports%40%232026@mixbtfnjdzmfbctkxnwk.supabase.co:5432/postgres?sslmode=require",
+    "JWT_SECRET": "de1d34de38b1a41f344751de4405276de8b9e3a82bbf7665a652b190635b8cfa372baef6068b8106bd1725ea412095e9",
+    "NODE_ENV": "production",
+    "CORS_ORIGINS": "https://app.nesportsfoundation.in,http://localhost:3000,http://localhost:4000"
+  }
+}

@@ -1,24 +1,5 @@
-# Ignore Node modules and dependencies
-node_modules/
-api/node_modules/
-.env
-.env.local
-.env.*.local
-
-# Ignore git
+api/
 .git
 .gitignore
-
-# Ignore Flutter build
-app/.dart_tool/
-app/build/
-app/.flutter-plugins
-app/.flutter-plugins-dependencies
-app/ios/Pods/
-
-# Ignore documentation and configs that aren't needed for deployment
-*.md
-docker-compose.yml
-scripts/
-test/
-DEPLOYMENT.md
+README.md
+node_modules

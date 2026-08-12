@@ -1,19 +1,10 @@
 {
   "version": 2,
-  "name": "nesf-core",
-  "builds": [
-    {
-      "src": "app/build/web",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "app/build/web/index.html"
-    }
+  "public": "public",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "env": {
-    "API_BASE": "https://app.nesportsfoundation.in"
+    "API_BASE": "https://api-f5mdjifmm-nesports.vercel.app"
   }
 }

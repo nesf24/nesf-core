@@ -1,0 +1,23 @@
+# Standard Node.js ignores (but keep api/public for Docker build)
+node_modules/
+npm-debug.log
+.env
+.env.local
+
+# Flutter build outputs (keep api/public though)
+app/build/
+.dart_tool/
+
+# IDE and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Don't ignore api/public - we need it for Docker builds
+!api/public/

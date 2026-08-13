@@ -46,9 +46,13 @@ app.use('/api', rateLimit({ windowMs: 60_000, limit: 300, standardHeaders: true 
 
 app.get('/health', async (_req, res) => {
   try {
-    await pool.query('SELECT 1');
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('database query timeout (5s)')), 5000)
+    );
+    await Promise.race([pool.query('SELECT 1'), timeout]);
     res.json({ ok: true, service: 'nesf-core-api', db: 'up' });
   } catch (err) {
+    console.error('[health] database check failed:', err.message);
     res.status(503).json({ ok: false, db: 'down', error: err.message });
   }
 });

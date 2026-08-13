@@ -6,7 +6,8 @@ class AppConfig {
   static const String _override = String.fromEnvironment('API_BASE');
 
   /// Where the app lives when nothing else is specified.
-  static const String productionOrigin = 'https://app.nesportsfoundation.in';
+  /// For local testing on same WiFi network: use computer's IP
+  static const String productionOrigin = 'http://10.13.97.1:4000';
 
   /// Base origin of the NESF Core API, always absolute.
   ///

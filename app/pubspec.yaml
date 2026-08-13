@@ -1,7 +1,7 @@
 name: nesf_core
 description: "NESF Core — HR & CRM for The NE Sports Foundation"
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+2006
 
 environment:
   sdk: ^3.12.1

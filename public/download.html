@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NESF Core - Download App</title>
+    <title>Download NESF Core - HR & CRM App</title>
     <style>
         * {
             margin: 0;
@@ -11,50 +11,292 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+            filter: blur(50px);
+        }
+
+        .blob1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            right: -100px;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .blob2 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            bottom: -100px;
+            left: -100px;
+            animation: float 10s infinite ease-in-out reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(30px, 30px) scale(1.1); }
         }
 
         .container {
+            width: 100%;
+            max-width: 600px;
+            z-index: 10;
+        }
+
+        /* Modal */
+        .modal {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                        0 0 100px rgba(102, 126, 234, 0.2);
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+            animation: shimmerMove 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmerMove {
+            0% { transform: translate(-100%, -100%); }
+            100% { transform: translate(100%, 100%); }
+        }
+
+        .modal-content {
+            position: relative;
+            z-index: 1;
             text-align: center;
-            color: white;
         }
 
-        .logo {
-            font-size: 48px;
+        .modal-icon {
+            font-size: 80px;
             margin-bottom: 20px;
+            display: inline-block;
+            animation: bounce 2s infinite;
         }
 
-        h1 {
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        h2 {
+            color: var(--dark);
             font-size: 36px;
+            font-weight: 800;
             margin-bottom: 10px;
-            font-weight: 600;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .subtitle {
-            font-size: 18px;
-            opacity: 0.9;
-            margin-bottom: 40px;
+            color: rgba(26, 26, 46, 0.7);
+            font-size: 16px;
+            margin-bottom: 35px;
+            font-weight: 500;
         }
 
-        /* Modal Popup */
-        .modal {
+        /* Features List */
+        .features-list {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(240, 147, 251, 0.05) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 35px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .feature-item {
             display: flex;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            margin-bottom: 12px;
+            color: var(--dark);
+            font-size: 15px;
+            font-weight: 500;
+            animation: slideInLeft 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .feature-item:nth-child(1) { animation-delay: 0.1s; }
+        .feature-item:nth-child(2) { animation-delay: 0.2s; }
+        .feature-item:nth-child(3) { animation-delay: 0.3s; }
+        .feature-item:nth-child(4) { animation-delay: 0.4s; }
+        .feature-item:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-icon {
+            margin-right: 12px;
+            font-size: 20px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            animation: fadeIn 0.3s ease-in;
+            width: 28px;
+        }
+
+        .feature-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        button:nth-of-type(1) { animation-delay: 0.6s; }
+        button:nth-of-type(2) { animation-delay: 0.7s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-download:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
+            color: var(--dark);
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border-left: 4px solid #10b981;
+            border-radius: 10px;
+            padding: 15px;
+            color: #047857;
+            font-size: 13px;
+            line-height: 1.6;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            animation: slideInUp 0.6s ease-out 0.8s forwards;
+            opacity: 0;
+        }
+
+        .info-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        /* Version Badge */
+        .version-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: fadeIn 0.6s ease-out 0.3s forwards;
+            opacity: 0;
         }
 
         @keyframes fadeIn {
@@ -62,159 +304,88 @@
             to { opacity: 1; }
         }
 
-        .modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 16px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
+        /* Responsive */
+        @media (max-width: 600px) {
+            .modal {
+                padding: 40px 25px;
+                border-radius: 20px;
             }
-            to {
-                transform: translateY(0);
-                opacity: 1;
+
+            h2 {
+                font-size: 28px;
             }
-        }
 
-        .modal-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
+            .modal-icon {
+                font-size: 60px;
+            }
 
-        .modal h2 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
+            button {
+                padding: 14px 28px;
+                font-size: 14px;
+            }
 
-        .modal-description {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-
-        .features {
-            text-align: left;
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            color: #333;
-        }
-
-        .features li {
-            margin-bottom: 8px;
-            list-style-position: inside;
-        }
-
-        .download-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-            width: 100%;
-            margin-bottom: 12px;
-        }
-
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-        }
-
-        .download-btn:active {
-            transform: translateY(0);
-        }
-
-        .close-btn {
-            background: #f0f0f0;
-            color: #333;
-            border: none;
-            padding: 12px 30px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            width: 100%;
-        }
-
-        .close-btn:hover {
-            background: #e0e0e0;
-        }
-
-        .info {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e3f2fd;
-            border-left: 4px solid #2196F3;
-            border-radius: 4px;
-            color: #1565c0;
-            font-size: 14px;
-            text-align: left;
-        }
-
-        .version {
-            margin-top: 20px;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
+            .version-badge {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="bg-blob blob1"></div>
+    <div class="bg-blob blob2"></div>
+
     <div class="container">
-        <div class="logo">📱</div>
-        <h1>NESF Core</h1>
-        <p class="subtitle">HR & CRM System for The NE Sports Foundation</p>
-    </div>
+        <div class="modal">
+            <div class="version-badge">V2.0</div>
 
-    <!-- Download Modal Popup -->
-    <div id="downloadModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-icon">📲</div>
-            <h2>Download NESF Core</h2>
-            <p class="modal-description">Get the official HR & CRM app for NESF staff</p>
+            <div class="modal-content">
+                <div class="modal-icon">📲</div>
+                <h2>Download NESF Core</h2>
+                <p class="subtitle">Get the official HR & CRM app now</p>
 
-            <ul class="features">
-                <li>✓ Daily Attendance Tracking</li>
-                <li>✓ Leave Management</li>
-                <li>✓ Activity Reports</li>
-                <li>✓ GPS Check-in Verification</li>
-                <li>✓ PDF Certificate Downloads</li>
-            </ul>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Daily Attendance with GPS verification</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📅</span>
+                        <span>Manage leave requests and approvals</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📸</span>
+                        <span>Selfie-based check-in verification</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <span>Comprehensive activity reports</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔒</span>
+                        <span>Secure and private data storage</span>
+                    </div>
+                </div>
 
-            <button class="download-btn" onclick="downloadAPK()">
-                📥 Download APK v2.0
-            </button>
+                <div class="button-group">
+                    <button class="btn-download" onclick="downloadAPK()">
+                        📥 Download APK (55 MB)
+                    </button>
+                    <button class="btn-cancel" onclick="closeModal()">
+                        Later
+                    </button>
+                </div>
 
-            <button class="close-btn" onclick="closeModal()">
-                Not Now
-            </button>
-
-            <div class="info">
-                <strong>Requirements:</strong> Android 5.0+, 55MB storage
+                <div class="info-box">
+                    <div class="info-title">System Requirements</div>
+                    Android 5.0 or higher • 55 MB available storage
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="version">
-        NESF Core v2.0 • Built for production
-    </div>
-
     <script>
         function downloadAPK() {
-            // Download the APK
             const link = document.createElement('a');
             link.href = '/NESF-Core-v2.0.apk';
             link.download = 'NESF-Core-v2.0.apk';
@@ -222,28 +393,34 @@
             link.click();
             document.body.removeChild(link);
 
-            // Show confirmation
             setTimeout(() => {
-                alert('✓ Download started! The app will install on your device.');
+                alert('✅ Download started! Your app will be installed on your device.');
             }, 500);
         }
 
         function closeModal() {
-            document.getElementById('downloadModal').style.display = 'none';
+            document.querySelector('.modal').style.animation = 'fadeOut 0.4s ease-in forwards';
+            setTimeout(() => {
+                window.history.back();
+            }, 400);
         }
 
-        // Auto-show modal on page load
-        window.addEventListener('load', () => {
-            document.getElementById('downloadModal').style.display = 'flex';
-        });
+        // Add fadeOut animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.8) translateY(20px); }
+            }
+        `;
+        document.head.appendChild(style);
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('downloadModal');
-            if (event.target == modal) {
+        // Click outside to close (optional)
+        document.body.addEventListener('click', (e) => {
+            if (e.target === document.body) {
                 closeModal();
             }
-        }
+        });
     </script>
 </body>
 </html>

@@ -367,7 +367,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         itemCount: _leaveBalance!.length,
         separatorBuilder: (_, __) => const SizedBox(width: 10),
         itemBuilder: (context, i) {
-          final b = _leaveBalance![i] as Map<String, dynamic>;
+          final b = _leaveBalance![i];
           final available = (b['available'] as num?)?.toDouble() ?? 0.0;
           final entitled = (b['entitled'] as num?)?.toDouble() ?? 0.0;
           return Container(

@@ -3,12 +3,14 @@ import 'package:go_router/go_router.dart';
 
 import 'screens/approvals_screen.dart';
 import 'screens/attendance_screen.dart';
+import 'screens/attendance_checkin.dart';
 import 'screens/calendar_screen.dart';
 import 'screens/crm_screen.dart';
 import 'screens/crm_contact_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/leave_apply_screen.dart';
 import 'screens/leave_screen.dart';
+import 'screens/leave_request.dart';
 import 'screens/login_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/projects_screen.dart';
@@ -53,6 +55,8 @@ GoRouter buildRouter(AuthService auth) {
 
       GoRoute(path: '/leaves', builder: (_, __) => const LeaveScreen()),
       GoRoute(path: '/leaves/apply', builder: (_, __) => const LeaveApplyScreen()),
+      GoRoute(path: '/checkin', builder: (_, __) => const AttendanceCheckInScreen()),
+      GoRoute(path: '/leaves/request', builder: (_, __) => const LeaveRequestScreen()),
 
       GoRoute(path: '/reports', builder: (_, __) => const ReportsScreen()),
       GoRoute(

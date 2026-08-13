@@ -11,6 +11,7 @@
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js",
     "import:employees": "node scripts/import-employees.js",
+    "import:onboarding-staff": "node scripts/import-onboarding-staff.js",
     "test:e2e": "node test/e2e.mjs",
     "test:media": "node test/media-privacy.mjs",
     "build:web": "node scripts/build-web.js"

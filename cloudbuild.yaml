@@ -1,0 +1,43 @@
+steps:
+  # Build Docker image from api directory (web already built locally)
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/nesf-core:latest'
+      - '-f'
+      - 'api/Dockerfile'
+      - 'api'
+
+  # Push to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/nesf-core:latest'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'nesf-core-api'
+      - '--image=asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/nesf-core:latest'
+      - '--region=asia-south1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8080'
+      - '--memory=1Gi'
+      - '--cpu=1'
+      - '--timeout=120'
+      - '--max-instances=4'
+      - '--min-instances=0'
+      - '--set-env-vars=NODE_ENV=production,STORAGE_DRIVER=gcs,GCS_BUCKET=nesf-core-uploads,CORS_ORIGINS=https://app.nesportsfoundation.in'
+      - '--set-secrets=JWT_SECRET=nesf-core-jwt-secret:latest,DB_PASSWORD=nesf-core-db-password:latest'
+      - '--set-cloudsql-instances=thenesports-api-prod:asia-south1:thenesports-db'
+
+images:
+  - 'asia-south1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/nesf-core:latest'
+
+options:
+  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY

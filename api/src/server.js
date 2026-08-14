@@ -81,6 +81,12 @@ app.use('/api/media', mediaRoutes);
 const webRoot = path.resolve(process.env.WEB_ROOT || 'public');
 
 if (fs.existsSync(path.join(webRoot, 'index.html'))) {
+  // Explicitly serve index.html at root
+  app.get('/', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.sendFile(path.join(webRoot, 'index.html'));
+  });
+
   app.use(express.static(webRoot, {
     index: false,
     // Flutter fingerprints its assets, but index.html and the service worker

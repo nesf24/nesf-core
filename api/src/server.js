@@ -92,6 +92,11 @@ if (fs.existsSync(path.join(webRoot, 'index.html'))) {
       } else {
         res.setHeader('Cache-Control', 'public, max-age=604800');
       }
+      // APK files must have the correct MIME type for browser downloads
+      if (filePath.endsWith('.apk')) {
+        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+        res.setHeader('Content-Disposition', `attachment; filename="${name}"`);
+      }
     },
   }));
 

@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "in.nesportsfoundation.nesf_core"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

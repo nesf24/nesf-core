@@ -116,6 +116,59 @@ router.post('/login', loginLimiter, ah(async (req, res) => {
   });
 }));
 
+const googleLoginSchema = z.object({
+  email: z.string().email('Invalid email'),
+  idToken: z.string().min(1, 'ID token is required'),
+  accessToken: z.string().optional(),
+  displayName: z.string().optional(),
+  photoUrl: z.string().optional(),
+  device: z.string().optional(),
+});
+
+router.post('/google-login', loginLimiter, ah(async (req, res) => {
+  const { email, idToken, displayName, photoUrl, device } = parse(googleLoginSchema, req.body);
+
+  // Verify email domain is @nesportsfoundation.in
+  if (!email.endsWith('@nesportsfoundation.in')) {
+    throw httpError(403, 'Only @nesportsfoundation.in accounts are allowed');
+  }
+
+  // Find or create employee by email
+  let { rows: employees } = await pool.query(
+    'SELECT * FROM employees WHERE lower(email) = lower($1)',
+    [email]
+  );
+  let user = employees[0];
+
+  if (!user) {
+    // Auto-create user on first Google login
+    const [firstName, ...lastNameParts] = (displayName || email.split('@')[0]).split(' ');
+    const { rows: newEmployee } = await pool.query(
+      `INSERT INTO employees (
+        email, full_name, is_active, created_at, updated_at
+      ) VALUES ($1, $2, $3, NOW(), NOW())
+      RETURNING *`,
+      [email, displayName || email, true]
+    );
+    user = newEmployee[0];
+  } else if (!user.is_active) {
+    throw httpError(403, 'Your account has been deactivated. Please contact the office.');
+  }
+
+  // Update last login and photo URL if available
+  await pool.query(
+    `UPDATE employees SET last_login_at = NOW()${photoUrl ? ', photo_url = $2' : ''}
+     WHERE id = $1`,
+    photoUrl ? [user.id, photoUrl] : [user.id]
+  );
+
+  res.json({
+    access_token: signAccessToken(user),
+    refresh_token: await issueRefreshToken(user.id, device),
+    user: publicUser(user),
+  });
+}));
+
 router.post('/refresh', ah(async (req, res) => {
   const token = String(req.body?.refresh_token || '');
   if (!token) throw httpError(400, 'Refresh token is required');

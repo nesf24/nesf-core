@@ -99,6 +99,13 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> signInWithGoogle(Map<String, dynamic> response) async {
+    final user = response['user'] as Map<String, dynamic>;
+    _employee = Employee(user);
+    _sessionExpired = false;
+    notifyListeners();
+  }
+
   Future<void> signOut() async {
     await api.logout();
     _employee = null;

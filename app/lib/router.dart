@@ -11,7 +11,7 @@ import 'screens/dashboard_screen.dart';
 import 'screens/leave_apply_screen.dart';
 import 'screens/leave_screen.dart';
 import 'screens/leave_request.dart';
-import 'screens/login_screen.dart';
+import 'screens/google_login_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/projects_screen.dart';
 import 'screens/activity_form_screen.dart';
@@ -39,7 +39,7 @@ GoRouter buildRouter(AuthService auth) {
     },
     routes: [
       GoRoute(path: '/', builder: (_, __) => const SplashScreen()),
-      GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
+      GoRoute(path: '/login', builder: (_, __) => const GoogleLoginScreen()),
 
       // The five-tab shell staff spend their time in.
       ShellRoute(

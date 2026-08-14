@@ -250,6 +250,31 @@ class Api {
     return body['user'] as Map<String, dynamic>;
   }
 
+  Future<Map<String, dynamic>> googleLogin({
+    required String email,
+    required String idToken,
+    String? accessToken,
+    String? displayName,
+    String? photoUrl,
+  }) async {
+    final res = await http.post(
+      _uri('/auth/google-login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': email,
+        'idToken': idToken,
+        'accessToken': accessToken,
+        'displayName': displayName,
+        'photoUrl': photoUrl,
+        'device': defaultTargetPlatform.name,
+      }),
+    );
+    if (res.statusCode >= 400) _throwFor(res);
+    final body = jsonDecode(res.body) as Map<String, dynamic>;
+    await _saveSession(body['access_token'] as String?, body['refresh_token'] as String?);
+    return body['user'] as Map<String, dynamic>;
+  }
+
   Future<void> logout() async {
     try {
       if (_refreshToken != null) {

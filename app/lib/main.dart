@@ -8,6 +8,8 @@ import 'services/attendance.dart';
 import 'services/auth.dart';
 import 'services/documents.dart';
 import 'services/fcm_service.dart';
+import 'providers/splash_provider.dart';
+import 'widgets/splash_overlay.dart';
 import 'theme.dart';
 
 Future<void> main() async {
@@ -53,15 +55,18 @@ class _NesfCoreAppState extends State<NesfCoreApp> {
         ChangeNotifierProvider<AuthService>.value(value: _auth),
         Provider<AttendanceService>.value(value: _attendance),
         Provider<DocumentService>.value(value: _documents),
+        ChangeNotifierProvider(create: (_) => SplashProvider()),
       ],
       child: Builder(
         builder: (context) {
           final router = buildRouter(_auth);
-          return MaterialApp.router(
-            title: 'NESF Core',
-            debugShowCheckedModeBanner: false,
-            theme: buildNesfTheme(),
-            routerConfig: router,
+          return SplashOverlay(
+            child: MaterialApp.router(
+              title: 'NESF Core',
+              debugShowCheckedModeBanner: false,
+              theme: buildNesfTheme(),
+              routerConfig: router,
+            ),
           );
         },
       ),

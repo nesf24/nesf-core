@@ -11,6 +11,7 @@ import employeeRoutes from './routes/employees.js';
 import attendanceRoutes from './routes/attendance.js';
 import attendanceConfigRoutes from './routes/attendance-config.js';
 import appInfoRoutes from './routes/app-info.js';
+import { startAttendanceScheduler } from './services/scheduler.js';
 import leaveRoutes from './routes/leaves.js';
 import reportRoutes from './routes/reports.js';
 import tadaRoutes from './routes/tada.js';
@@ -141,4 +142,7 @@ app.use((err, req, res, _next) => {
 const port = Number(process.env.PORT) || 4000;
 app.listen(port, () => {
   console.log(`[nesf-core-api] listening on :${port}`);
+
+  // Start the attendance reminder scheduler
+  startAttendanceScheduler();
 });

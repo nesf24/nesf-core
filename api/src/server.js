@@ -9,6 +9,7 @@ import pool from './db.js';
 import authRoutes from './routes/auth.js';
 import employeeRoutes from './routes/employees.js';
 import attendanceRoutes from './routes/attendance.js';
+import attendanceConfigRoutes from './routes/attendance-config.js';
 import leaveRoutes from './routes/leaves.js';
 import reportRoutes from './routes/reports.js';
 import tadaRoutes from './routes/tada.js';
@@ -60,6 +61,7 @@ app.get('/health', async (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/attendance', attendanceRoutes);
+app.use('/api/attendance-config', attendanceConfigRoutes);
 app.use('/api/leaves', leaveRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/tada', tadaRoutes);

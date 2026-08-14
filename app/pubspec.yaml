@@ -36,6 +36,10 @@ dependencies:
   # Formatting
   intl: ^0.20.1
 
+  # Firebase Cloud Messaging for push notifications
+  firebase_core: ^2.24.0
+  firebase_messaging: ^14.6.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

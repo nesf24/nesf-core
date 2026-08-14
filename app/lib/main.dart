@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'router.dart';
 import 'services/api.dart';
 import 'services/attendance.dart';
 import 'services/auth.dart';
 import 'services/documents.dart';
+import 'services/fcm_service.dart';
 import 'theme.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp();
+  await FcmService.initialize();
+
   runApp(const NesfCoreApp());
 }
 

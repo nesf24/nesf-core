@@ -1,5 +1,20 @@
 steps:
-  # Build Docker image from api directory (web already built locally)
+  # Install dependencies and build the Flutter web app
+  - name: 'node:20'
+    dir: 'api'
+    entrypoint: 'npm'
+    args:
+      - 'ci'
+      - '--omit=dev'
+
+  - name: 'node:20'
+    dir: 'api'
+    entrypoint: 'npm'
+    args:
+      - 'run'
+      - 'build:web'
+
+  # Build Docker image from api directory (web built in previous step)
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'

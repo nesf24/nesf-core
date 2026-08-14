@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 
 class AppConfig {
   /// Explicit override, set at build time:
-  ///   flutter build apk --dart-define=API_BASE=https://app.nesportsfoundation.in
+  ///   flutter build apk --dart-define=API_BASE=https://nesf-core.vercel.app
   static const String _override = String.fromEnvironment('API_BASE');
 
   /// Where the app lives when nothing else is specified.
-  /// Production API endpoint
-  static const String productionOrigin = 'https://app.nesportsfoundation.in';
+  /// Production API endpoint (Vercel deployment)
+  static const String productionOrigin = 'https://nesf-core.vercel.app';
 
   /// Base origin of the NESF Core API, always absolute.
   ///

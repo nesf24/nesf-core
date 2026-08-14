@@ -4,6 +4,6 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "env": {
-    "API_BASE": "https://app.nesportsfoundation.in"
+    "API_BASE": "https://nesf-core.vercel.app"
   }
 }

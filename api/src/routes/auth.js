@@ -6,6 +6,7 @@ import rateLimit from 'express-rate-limit';
 import pool from '../db.js';
 import { signAccessToken, requireAuth } from '../middleware/auth.js';
 import { ah, parse, httpError } from '../utils.js';
+import { storeFcmToken } from '../middleware/fcm-token.js';
 
 const router = Router();
 
@@ -184,6 +185,19 @@ router.post('/change-password', requireAuth, ah(async (req, res) => {
     [req.user.id]
   );
   res.json({ ok: true });
+}));
+
+// Store FCM token for push notifications
+router.post('/fcm-token', requireAuth, ah(async (req, res) => {
+  const { fcm_token, device_type } = req.body;
+
+  if (!fcm_token) {
+    throw httpError(400, 'FCM token is required');
+  }
+
+  await storeFcmToken(req.user.id, fcm_token, device_type || null);
+
+  res.json({ ok: true, message: 'FCM token stored' });
 }));
 
 export default router;

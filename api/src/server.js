@@ -92,6 +92,7 @@ try {
     const resolved = path.resolve(process.env.WEB_ROOT);
     if (fs.existsSync(path.join(resolved, 'index.html'))) {
       webRoot = resolved;
+      console.log(`[nesf-core-api] Using WEB_ROOT: ${webRoot}`);
     }
   }
 
@@ -100,6 +101,7 @@ try {
     const possiblePaths = [
       path.join(process.cwd(), '../public'),
       path.join(process.cwd(), 'public'),
+      path.resolve(path.join(__dirname, '../../public')),
     ];
 
     for (const p of possiblePaths) {
@@ -107,6 +109,7 @@ try {
         const resolved = path.resolve(p);
         if (fs.existsSync(path.join(resolved, 'index.html'))) {
           webRoot = resolved;
+          console.log(`[nesf-core-api] Found web build at: ${webRoot}`);
           break;
         }
       } catch (_e) {
@@ -114,8 +117,12 @@ try {
       }
     }
   }
+
+  if (!webRoot) {
+    console.log(`[nesf-core-api] Web build not found, but server will still run for API`);
+  }
 } catch (_e) {
-  // Continue without webRoot
+  console.error(`[nesf-core-api] Error resolving webRoot: ${_e.message}`);
 }
 
 if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {

@@ -89,12 +89,16 @@ if (!webRoot) {
   const possiblePaths = [
     path.join(__dirname, '../../public'),
     path.join(__dirname, '../public'),
+    path.join(process.cwd(), '../public'),
     path.join(process.cwd(), 'public'),
   ];
   for (const p of possiblePaths) {
     if (fs.existsSync(path.join(p, 'index.html'))) {
       webRoot = p;
+      console.log(`[nesf-core-api] ✅ Found web build at: ${p}`);
       break;
+    } else {
+      console.log(`[nesf-core-api] Checked ${p} - not found`);
     }
   }
 }

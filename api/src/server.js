@@ -83,9 +83,23 @@ app.use('/api/media', mediaRoutes);
 // into ./public; when it is absent (a pure API deployment, or local API-only
 // development) these handlers simply do not mount.
 // ---------------------------------------------------------------------------
-const webRoot = path.resolve(process.env.WEB_ROOT || path.join(__dirname, '../../public'));
+// Resolve webRoot - try multiple paths to handle different deployment environments
+let webRoot = process.env.WEB_ROOT;
+if (!webRoot) {
+  const possiblePaths = [
+    path.join(__dirname, '../../public'),
+    path.join(__dirname, '../public'),
+    path.join(process.cwd(), 'public'),
+  ];
+  for (const p of possiblePaths) {
+    if (fs.existsSync(path.join(p, 'index.html'))) {
+      webRoot = p;
+      break;
+    }
+  }
+}
 
-if (fs.existsSync(path.join(webRoot, 'index.html'))) {
+if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
   // Explicitly serve index.html at root
   app.get('/', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');

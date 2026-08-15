@@ -1,6 +1,10 @@
 {
   "version": 2,
-  "framework": "express",
+  "buildCommand": "cd api && npm install --production",
+  "outputDirectory": "api",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "src/server.js" }
+  ],
   "env": {
     "WEB_ROOT": "../public",
     "NODE_ENV": "production"

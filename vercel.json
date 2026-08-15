@@ -1,9 +1,17 @@
 {
   "version": 2,
-  "buildCommand": "cd api && npm ci",
-  "outputDirectory": "api",
+  "installCommand": "cd api && npm ci",
+  "buildCommand": "true",
   "env": {
-    "NODE_ENV": "production",
-    "WEB_ROOT": "public"
-  }
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs20.x",
+      "maxDuration": 120
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api/index.js" }
+  ]
 }

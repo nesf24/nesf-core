@@ -47,6 +47,20 @@ app.use((req, res, next) => {
   next();
 });
 
+// VERY EARLY: Catch root path before anything else
+app.get('/', (req, res) => {
+  console.log('[EARLY root handler] Called! webRoot:', webRoot);
+  res.status(200).send(`<!DOCTYPE html>
+<html>
+<head><title>NESF Core - Early Handler</title></head>
+<body>
+<h1>NESF Core - Root Handler Working!</h1>
+<p>This is from the early-registered root handler.</p>
+<p><a href="/health">Health Check</a></p>
+</body>
+</html>`);
+});
+
 // Broad ceiling so a misbehaving client cannot exhaust the instance; the login
 // endpoint has its own tighter limit.
 app.use('/api', rateLimit({ windowMs: 60_000, limit: 300, standardHeaders: true }));

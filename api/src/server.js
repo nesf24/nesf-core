@@ -191,7 +191,31 @@ if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
   });
 }
 
-app.use((req, res) => res.status(404).json({ error: `No such endpoint: ${req.method} ${req.path}` }));
+// Explicit catch for root path as final fallback
+app.all('/', (req, res, next) => {
+  console.log('[root catch-all] request to / - webRoot:', webRoot);
+  if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
+    if (req.accepts('html')) {
+      return res.sendFile(path.join(webRoot, 'index.html'));
+    }
+  } else if (!webRoot) {
+    return res.status(200).send(`<!DOCTYPE html>
+<html>
+<head><title>NESF Core API</title></head>
+<body>
+<h1>NESF Core API</h1>
+<p>Web build not found. API is running on /api/*</p>
+<p><a href="/health">Health Check</a></p>
+</body>
+</html>`);
+  }
+  next();
+});
+
+// Final fallback: return 404 for everything else
+app.use((req, res) => {
+  res.status(404).json({ error: `No such endpoint: ${req.method} ${req.path}` });
+});
 
 // Central error handler. Client-safe messages for known statuses; opaque for the
 // rest, with the detail kept in the server log.

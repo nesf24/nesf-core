@@ -3,9 +3,9 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/health", "destination": "/health" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/(?!.*\\.(apk|js|css|png|jpg|jpeg|gif|svg|ico|json|woff2?)$)(.*)$", "destination": "/index.html" }
   ],
   "env": {
-    "API_BASE": "https://nesf-core.vercel.app"
+    "API_BASE": "https://app.nesportsfoundation.in"
   }
 }

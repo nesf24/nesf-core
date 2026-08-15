@@ -15,9 +15,19 @@ import 'theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
-  await Firebase.initializeApp();
-  await FcmService.initialize();
+  try {
+    // Initialize Firebase with timeout
+    await Firebase.initializeApp().timeout(Duration(seconds: 10));
+  } catch (e) {
+    print('Firebase initialization timeout or error: $e');
+  }
+
+  try {
+    // Initialize FCM with timeout
+    await FcmService.initialize().timeout(Duration(seconds: 10));
+  } catch (e) {
+    print('FCM initialization timeout or error: $e');
+  }
 
   runApp(const NesfCoreApp());
 }

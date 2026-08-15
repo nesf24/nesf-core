@@ -81,10 +81,13 @@ class AuthService extends ChangeNotifier {
     await api.loadSession();
     if (api.hasSession) {
       try {
-        final me = await api.get('/auth/me') as Map<String, dynamic>;
+        final me = await api
+            .get('/auth/me')
+            .timeout(Duration(seconds: 5))
+            as Map<String, dynamic>;
         _employee = Employee(me);
       } catch (_) {
-        // Token unusable — fall through to the login screen.
+        // Token unusable or request timed out — fall through to login screen.
         await api.clearSession();
       }
     }

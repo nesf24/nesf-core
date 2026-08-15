@@ -18,9 +18,12 @@ router.get('/download', (req, res) => {
   try {
     // Try multiple possible paths where APK might be located
     const possiblePaths = [
+      path.join(process.cwd(), 'public/nesf-core.apk'),
+      path.join(process.cwd(), 'public/NESF-Core-v2.1.apk'),
+      path.join(process.cwd(), '../public/nesf-core.apk'),
+      path.join(process.cwd(), '../public/NESF-Core-v2.1.apk'),
       path.join(process.cwd(), 'NESF-Core-v2.1.apk'),
       path.join(process.cwd(), '../NESF-Core-v2.1.apk'),
-      path.join(process.cwd(), 'public/NESF-Core-v2.1.apk'),
       path.join(process.cwd(), 'public/NESF-Core-v2.1-google-signin.apk'),
     ];
 

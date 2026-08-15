@@ -84,7 +84,13 @@ app.use('/api/media', mediaRoutes);
 // development) these handlers simply do not mount.
 // ---------------------------------------------------------------------------
 // Resolve webRoot - try multiple paths to handle different deployment environments
-let webRoot = process.env.WEB_ROOT;
+let webRoot = process.env.WEB_ROOT ? path.resolve(process.env.WEB_ROOT) : null;
+
+console.log(`[nesf-core-api] Current working directory: ${process.cwd()}`);
+console.log(`[nesf-core-api] __dirname: ${__dirname}`);
+console.log(`[nesf-core-api] WEB_ROOT env var: ${process.env.WEB_ROOT}`);
+console.log(`[nesf-core-api] Resolved webRoot: ${webRoot}`);
+
 if (!webRoot) {
   const possiblePaths = [
     path.join(__dirname, '../../public'),
@@ -93,12 +99,13 @@ if (!webRoot) {
     path.join(process.cwd(), 'public'),
   ];
   for (const p of possiblePaths) {
-    if (fs.existsSync(path.join(p, 'index.html'))) {
-      webRoot = p;
-      console.log(`[nesf-core-api] ✅ Found web build at: ${p}`);
+    const resolvedPath = path.resolve(p);
+    if (fs.existsSync(path.join(resolvedPath, 'index.html'))) {
+      webRoot = resolvedPath;
+      console.log(`[nesf-core-api] ✅ Found web build at: ${resolvedPath}`);
       break;
     } else {
-      console.log(`[nesf-core-api] Checked ${p} - not found`);
+      console.log(`[nesf-core-api] Checked ${resolvedPath} - not found`);
     }
   }
 }

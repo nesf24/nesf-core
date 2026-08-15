@@ -1,7 +1,6 @@
 {
   "version": 2,
   "env": {
-    "WEB_ROOT": "../public",
     "NODE_ENV": "production"
   }
 }

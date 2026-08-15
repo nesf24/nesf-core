@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1020266139137",
-    "project_id": "nesportshub",
-    "storage_bucket": "nesportshub.firebasestorage.app"
+    "project_number": "122842824264",
+    "project_id": "nesports-core",
+    "storage_bucket": "nesports-core.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1020266139137:android:1d5b050a9d3681b81aba00",
+        "mobilesdk_app_id": "1:122842824264:android:3ff29c079a4f7125b8627d",
         "android_client_info": {
-          "package_name": "nesports.hub"
+          "package_name": "in.nesportsfoundation.nesf_core"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAfiylM-7Ep_gLFCV3w6qZ8k34IHNaG6a8"
+          "current_key": "AIzaSyDOv2fl6r8p4D2YL1GCghQ95ZAWzmDPZQ8"
         }
       ],
       "services": {

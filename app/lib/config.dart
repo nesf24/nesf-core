@@ -6,8 +6,8 @@ class AppConfig {
   static const String _override = String.fromEnvironment('API_BASE');
 
   /// Where the app lives when nothing else is specified.
-  /// Production API endpoint (Vercel deployment)
-  static const String productionOrigin = 'https://nesf-core.vercel.app';
+  /// Production API endpoint (Vercel deployment, aliased to nesportsfoundation.in)
+  static const String productionOrigin = 'https://app.nesportsfoundation.in';
 
   /// Base origin of the NESF Core API, always absolute.
   ///

@@ -39,6 +39,14 @@ app.use(cors({
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// DEBUG: Log all requests
+app.use((req, res, next) => {
+  if (req.path === '/') {
+    console.log(`[REQUEST] ${req.method} ${req.path} - accepting:`, req.accepts() || 'none');
+  }
+  next();
+});
+
 // Broad ceiling so a misbehaving client cannot exhaust the instance; the login
 // endpoint has its own tighter limit.
 app.use('/api', rateLimit({ windowMs: 60_000, limit: 300, standardHeaders: true }));
@@ -193,22 +201,29 @@ if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
 
 // Explicit catch for root path as final fallback
 app.all('/', (req, res, next) => {
-  console.log('[root catch-all] request to / - webRoot:', webRoot);
-  if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
-    if (req.accepts('html')) {
-      return res.sendFile(path.join(webRoot, 'index.html'));
+  console.log('[root catch-all] webRoot:', webRoot);
+  if (webRoot) {
+    const indexPath = path.join(webRoot, 'index.html');
+    const hasIndex = fs.existsSync(indexPath);
+    console.log('[root catch-all] indexPath:', indexPath, '- exists:', hasIndex);
+    if (hasIndex && req.accepts('html')) {
+      console.log('[root catch-all] Serving index.html');
+      return res.sendFile(indexPath);
     }
-  } else if (!webRoot) {
+  } else {
+    console.log('[root catch-all] webRoot is null, serving fallback');
     return res.status(200).send(`<!DOCTYPE html>
 <html>
 <head><title>NESF Core API</title></head>
 <body>
 <h1>NESF Core API</h1>
+<p>Web build location: ${process.cwd()}</p>
 <p>Web build not found. API is running on /api/*</p>
 <p><a href="/health">Health Check</a></p>
 </body>
 </html>`);
   }
+  console.log('[root catch-all] Calling next()');
   next();
 });
 

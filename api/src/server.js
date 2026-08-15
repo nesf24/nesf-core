@@ -162,6 +162,34 @@ if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
   console.log(`[nesf-core-api] serving the web app from ${webRoot}`);
 }
 
+// Fallback: serve index.html for root path if web build exists
+if (webRoot) {
+  app.get('/', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.sendFile(path.join(webRoot, 'index.html'));
+  });
+} else {
+  // Serve a simple HTML page at root if web build not found
+  app.get('/', (req, res) => {
+    res.setHeader('Content-Type', 'text/html');
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>NESF Core</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      </head>
+      <body>
+        <h1>NESF Core API</h1>
+        <p>API is running. For the web UI, use a mobile device with the NESF Core app.</p>
+        <p><a href="/health">Health Check</a></p>
+      </body>
+      </html>
+    `);
+  });
+}
+
 app.use((req, res) => res.status(404).json({ error: `No such endpoint: ${req.method} ${req.path}` }));
 
 // Central error handler. Client-safe messages for known statuses; opaque for the

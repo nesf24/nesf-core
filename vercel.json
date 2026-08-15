@@ -1,17 +1,9 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/health", "destination": "/health" },
-    { "source": "/(.*\\.apk)$", "destination": "/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/health", "dest": "/health" },
-    { "src": "/public/(.*)", "dest": "/public/$1" }
-  ],
+  "buildCommand": "cd api && npm ci",
+  "outputDirectory": "api",
   "env": {
-    "API_BASE": "https://app.nesportsfoundation.in"
+    "NODE_ENV": "production",
+    "WEB_ROOT": "public"
   }
 }

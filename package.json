@@ -1,0 +1,14 @@
+{
+  "name": "nesf-core",
+  "version": "1.0.0",
+  "description": "NESF Core — HR & CRM backend and web",
+  "type": "module",
+  "scripts": {
+    "install": "cd api && npm install",
+    "start": "cd api && node src/server.js",
+    "dev": "cd api && npm run dev"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

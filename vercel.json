@@ -1,9 +1,19 @@
 {
   "version": 2,
-  "buildCommand": "cd api && npm install",
-  "crons": [],
   "env": {
     "WEB_ROOT": "../public",
     "NODE_ENV": "production"
-  }
+  },
+  "builds": [
+    {
+      "src": "api/package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/src/server.js"
+    }
+  ]
 }

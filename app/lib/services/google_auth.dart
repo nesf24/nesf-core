@@ -5,22 +5,26 @@ import 'api.dart';
 class GoogleAuthService {
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
-    hostedDomain: 'nesportsfoundation.in', // Restrict to company domain
+    // Note: hostedDomain was removed as it can cause auth issues on some devices
+    // Server-side domain validation is more reliable
   );
 
   /// Sign in with Google and authenticate with backend
   static Future<Map<String, dynamic>> signInWithGoogle(Api api) async {
     try {
       // Trigger Google Sign-In
+      developer.log('Starting Google Sign-In...');
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
         throw Exception('Sign in aborted by user');
       }
 
-      // Verify email is from correct domain
+      developer.log('Google user email: ${googleUser.email}');
+
+      // Verify email is from correct domain (client-side check)
       if (!googleUser.email.endsWith('@nesportsfoundation.in')) {
         await _googleSignIn.signOut();
-        throw Exception('Please use your @nesportsfoundation.in account');
+        throw Exception('Please use your @nesportsfoundation.in account. You signed in as ${googleUser.email}');
       }
 
       developer.log('Google user signed in: ${googleUser.email}');

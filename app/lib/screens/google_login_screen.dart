@@ -59,8 +59,19 @@ class _GoogleLoginScreenState extends State<GoogleLoginScreen> {
         // Navigation will happen automatically via auth listener
       }
     } catch (e) {
+      String errorMsg = e.toString().replaceAll('Exception: ', '');
+
+      // Handle specific error codes
+      if (errorMsg.contains('m2 d10')) {
+        errorMsg = 'Google Sign-In configuration error. Please check with the administrator.';
+      } else if (errorMsg.contains('network')) {
+        errorMsg = 'Network error. Please check your internet connection.';
+      } else if (errorMsg.contains('aborted')) {
+        errorMsg = 'Sign in cancelled.';
+      }
+
       setState(() {
-        _errorMessage = e.toString().replaceAll('Exception: ', '');
+        _errorMessage = errorMsg;
         _isLoading = false;
       });
     }

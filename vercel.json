@@ -1,5 +1,5 @@
 {
   "version": 2,
   "buildCommand": "cd api && npm ci",
-  "startCommand": "cd api && node src/server.js"
+  "startCommand": "cd api && WEB_ROOT=../public node src/server.js"
 }

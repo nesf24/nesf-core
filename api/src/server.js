@@ -83,7 +83,7 @@ app.use('/api/media', mediaRoutes);
 // into ./public; when it is absent (a pure API deployment, or local API-only
 // development) these handlers simply do not mount.
 // ---------------------------------------------------------------------------
-const webRoot = path.resolve(process.env.WEB_ROOT || 'public');
+const webRoot = path.resolve(process.env.WEB_ROOT || path.join(__dirname, '../../public'));
 
 if (fs.existsSync(path.join(webRoot, 'index.html'))) {
   // Explicitly serve index.html at root

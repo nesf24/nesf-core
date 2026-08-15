@@ -84,30 +84,38 @@ app.use('/api/media', mediaRoutes);
 // development) these handlers simply do not mount.
 // ---------------------------------------------------------------------------
 // Resolve webRoot - try multiple paths to handle different deployment environments
-let webRoot = process.env.WEB_ROOT ? path.resolve(process.env.WEB_ROOT) : null;
+let webRoot = null;
 
-console.log(`[nesf-core-api] Current working directory: ${process.cwd()}`);
-console.log(`[nesf-core-api] __dirname: ${__dirname}`);
-console.log(`[nesf-core-api] WEB_ROOT env var: ${process.env.WEB_ROOT}`);
-console.log(`[nesf-core-api] Resolved webRoot: ${webRoot}`);
-
-if (!webRoot) {
-  const possiblePaths = [
-    path.join(__dirname, '../../public'),
-    path.join(__dirname, '../public'),
-    path.join(process.cwd(), '../public'),
-    path.join(process.cwd(), 'public'),
-  ];
-  for (const p of possiblePaths) {
-    const resolvedPath = path.resolve(p);
-    if (fs.existsSync(path.join(resolvedPath, 'index.html'))) {
-      webRoot = resolvedPath;
-      console.log(`[nesf-core-api] ✅ Found web build at: ${resolvedPath}`);
-      break;
-    } else {
-      console.log(`[nesf-core-api] Checked ${resolvedPath} - not found`);
+try {
+  // Try WEB_ROOT env variable first
+  if (process.env.WEB_ROOT) {
+    const resolved = path.resolve(process.env.WEB_ROOT);
+    if (fs.existsSync(path.join(resolved, 'index.html'))) {
+      webRoot = resolved;
     }
   }
+
+  // If not found, try auto-detection
+  if (!webRoot) {
+    const possiblePaths = [
+      path.join(process.cwd(), '../public'),
+      path.join(process.cwd(), 'public'),
+    ];
+
+    for (const p of possiblePaths) {
+      try {
+        const resolved = path.resolve(p);
+        if (fs.existsSync(path.join(resolved, 'index.html'))) {
+          webRoot = resolved;
+          break;
+        }
+      } catch (_e) {
+        // Continue to next path
+      }
+    }
+  }
+} catch (_e) {
+  // Continue without webRoot
 }
 
 if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {

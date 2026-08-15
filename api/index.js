@@ -67,23 +67,16 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/media', mediaRoutes);
 
-// Serve static web files
-const possibleWebRoots = [
-  path.join(__dirname, '../public'),
-  path.join(__dirname, 'public'),
-  process.env.WEB_ROOT ? path.resolve(process.env.WEB_ROOT) : null,
-].filter(Boolean);
+// Serve static web files - check for Flutter web build
+const webRoot = path.join(__dirname, '../public');
+const hasIndexHtml = fs.existsSync(path.join(webRoot, 'index.html'));
 
-let webRoot = null;
-for (const p of possibleWebRoots) {
-  if (fs.existsSync(path.join(p, 'index.html'))) {
-    webRoot = p;
-    console.log(`[nesf-core-api] serving web from ${p}`);
-    break;
-  }
-}
+console.log(`[nesf-core-api] Flutter web build check: ${webRoot}`);
+console.log(`[nesf-core-api] index.html exists: ${hasIndexHtml}`);
 
-if (webRoot) {
+if (hasIndexHtml) {
+  console.log(`[nesf-core-api] serving web from ${webRoot}`);
+
   // Serve index.html at root
   app.get('/', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -113,6 +106,9 @@ if (webRoot) {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.sendFile(path.join(webRoot, 'index.html'));
   });
+} else {
+  console.log(`[nesf-core-api] ⚠️ index.html NOT found at ${webRoot}`);
+  console.log(`[nesf-core-api] Running in API-only mode`);
 }
 
 // 404 handler

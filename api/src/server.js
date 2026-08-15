@@ -160,14 +160,6 @@ if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
   });
 
   console.log(`[nesf-core-api] serving the web app from ${webRoot}`);
-}
-
-// Fallback: serve index.html for root path if web build exists
-if (webRoot) {
-  app.get('/', (req, res) => {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.sendFile(path.join(webRoot, 'index.html'));
-  });
 } else {
   // Serve a simple HTML page at root if web build not found
   app.get('/', (req, res) => {
@@ -176,7 +168,7 @@ if (webRoot) {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>NESF Core</title>
+        <title>NESF Core API</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
       </head>

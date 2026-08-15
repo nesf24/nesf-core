@@ -1,17 +1,7 @@
 {
   "version": 2,
   "env": {
-    "WEB_ROOT": "../public",
+    "WEB_ROOT": "public",
     "NODE_ENV": "production"
-  },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  }
 }

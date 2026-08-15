@@ -107,13 +107,16 @@ try {
     for (const p of possiblePaths) {
       try {
         const resolved = path.resolve(p);
-        if (fs.existsSync(path.join(resolved, 'index.html'))) {
+        const indexPath = path.join(resolved, 'index.html');
+        const exists = fs.existsSync(indexPath);
+        console.log(`[nesf-core-api] Checking ${resolved}... ${exists ? '✓ FOUND' : '✗ not found'}`);
+        if (exists) {
           webRoot = resolved;
           console.log(`[nesf-core-api] Found web build at: ${webRoot}`);
           break;
         }
       } catch (_e) {
-        // Continue to next path
+        console.log(`[nesf-core-api] Error checking path ${p}: ${_e.message}`);
       }
     }
   }
@@ -129,7 +132,12 @@ if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
   // Explicitly serve index.html at root
   app.get('/', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.sendFile(path.join(webRoot, 'index.html'));
+    try {
+      res.sendFile(path.join(webRoot, 'index.html'));
+    } catch (err) {
+      console.error('[root handler error]', err.message);
+      res.status(500).json({ error: 'Failed to serve index.html: ' + err.message });
+    }
   });
 
   app.use(express.static(webRoot, {
@@ -161,6 +169,7 @@ if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
 
   console.log(`[nesf-core-api] serving the web app from ${webRoot}`);
 } else {
+  console.log(`[nesf-core-api] Web build not found, registering fallback root handler`);
   // Serve a simple HTML page at root if web build not found
   app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'text/html');

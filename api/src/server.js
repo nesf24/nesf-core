@@ -39,28 +39,6 @@ app.use(cors({
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// DEBUG: Log all requests
-app.use((req, res, next) => {
-  if (req.path === '/') {
-    console.log(`[REQUEST] ${req.method} ${req.path} - accepting:`, req.accepts() || 'none');
-  }
-  next();
-});
-
-// VERY EARLY: Catch root path before anything else
-app.get('/', (req, res) => {
-  console.log('[EARLY root handler] Called! webRoot:', webRoot);
-  res.status(200).send(`<!DOCTYPE html>
-<html>
-<head><title>NESF Core - Early Handler</title></head>
-<body>
-<h1>NESF Core - Root Handler Working!</h1>
-<p>This is from the early-registered root handler.</p>
-<p><a href="/health">Health Check</a></p>
-</body>
-</html>`);
-});
-
 // Broad ceiling so a misbehaving client cannot exhaust the instance; the login
 // endpoint has its own tighter limit.
 app.use('/api', rateLimit({ windowMs: 60_000, limit: 300, standardHeaders: true }));
@@ -109,42 +87,34 @@ app.use('/api/media', mediaRoutes);
 let webRoot = null;
 
 try {
-  // Try WEB_ROOT env variable first
-  if (process.env.WEB_ROOT) {
-    const resolved = path.resolve(process.env.WEB_ROOT);
-    if (fs.existsSync(path.join(resolved, 'index.html'))) {
-      webRoot = resolved;
-      console.log(`[nesf-core-api] Using WEB_ROOT: ${webRoot}`);
-    }
-  }
+  // Try hardcoded paths first (most specific to least specific)
+  const possiblePaths = [
+    // From npm start (cd api && node src/server.js)
+    path.resolve(path.join(__dirname, '../../public')),
+    path.join(process.cwd(), '../public'),
+    // From direct node invocation
+    path.resolve(path.join(__dirname, '../public')),
+    path.join(process.cwd(), 'public'),
+  ];
 
-  // If not found, try auto-detection
-  if (!webRoot) {
-    const possiblePaths = [
-      path.join(process.cwd(), '../public'),
-      path.join(process.cwd(), 'public'),
-      path.resolve(path.join(__dirname, '../../public')),
-    ];
-
-    for (const p of possiblePaths) {
-      try {
-        const resolved = path.resolve(p);
-        const indexPath = path.join(resolved, 'index.html');
-        const exists = fs.existsSync(indexPath);
-        console.log(`[nesf-core-api] Checking ${resolved}... ${exists ? '✓ FOUND' : '✗ not found'}`);
-        if (exists) {
-          webRoot = resolved;
-          console.log(`[nesf-core-api] Found web build at: ${webRoot}`);
-          break;
-        }
-      } catch (_e) {
-        console.log(`[nesf-core-api] Error checking path ${p}: ${_e.message}`);
+  for (const p of possiblePaths) {
+    try {
+      const indexPath = path.join(p, 'index.html');
+      const exists = fs.existsSync(indexPath);
+      const shortPath = p.replace(process.cwd(), '.');
+      console.log(`[nesf-core-api] Checking ${shortPath}... ${exists ? '✓ FOUND' : '✗ not found'}`);
+      if (exists) {
+        webRoot = path.resolve(p);
+        console.log(`[nesf-core-api] Found web build at: ${webRoot}`);
+        break;
       }
+    } catch (_e) {
+      console.log(`[nesf-core-api] Error checking path ${p}: ${_e.message}`);
     }
   }
 
   if (!webRoot) {
-    console.log(`[nesf-core-api] Web build not found, but server will still run for API`);
+    console.log(`[nesf-core-api] Web build not found, running API-only mode`);
   }
 } catch (_e) {
   console.error(`[nesf-core-api] Error resolving webRoot: ${_e.message}`);

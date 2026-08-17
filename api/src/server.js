@@ -88,24 +88,27 @@ let webRoot = null;
 
 try {
   // Try hardcoded paths first (most specific to least specific)
+  // __dirname is always /app/src in Cloud Run, /absolute/path/to/api/src locally
   const possiblePaths = [
-    // From npm start (cd api && node src/server.js)
-    path.resolve(path.join(__dirname, '../../public')),
-    path.join(process.cwd(), '../public'),
-    // From direct node invocation
+    // Cloud Run: __dirname=/app/src, need /app/public
     path.resolve(path.join(__dirname, '../public')),
-    path.join(process.cwd(), 'public'),
+    // Local development: __dirname=.../api/src, might be launched from root
+    path.resolve(path.join(__dirname, '../../public')),
+    // Local development: launched from api/ directory
+    path.resolve(path.join(__dirname, '../public')),
+    // Fallback: relative to cwd
+    path.resolve(path.join(process.cwd(), 'public')),
+    path.resolve(path.join(process.cwd(), 'api', 'public')),
   ];
 
   for (const p of possiblePaths) {
     try {
       const indexPath = path.join(p, 'index.html');
       const exists = fs.existsSync(indexPath);
-      const shortPath = p.replace(process.cwd(), '.');
-      console.log(`[nesf-core-api] Checking ${shortPath}... ${exists ? '✓ FOUND' : '✗ not found'}`);
+      console.log(`[nesf-core-api] Checking ${p}... ${exists ? '✓ FOUND' : '✗ not found'}`);
       if (exists) {
         webRoot = path.resolve(p);
-        console.log(`[nesf-core-api] Found web build at: ${webRoot}`);
+        console.log(`[nesf-core-api] ✅ Found web build at: ${webRoot}`);
         break;
       }
     } catch (_e) {
@@ -114,7 +117,9 @@ try {
   }
 
   if (!webRoot) {
-    console.log(`[nesf-core-api] Web build not found, running API-only mode`);
+    console.log(`[nesf-core-api] ❌ Web build not found at any path. Running API-only mode.`);
+    console.log(`[nesf-core-api] Current working directory: ${process.cwd()}`);
+    console.log(`[nesf-core-api] __dirname: ${__dirname}`);
   }
 } catch (_e) {
   console.error(`[nesf-core-api] Error resolving webRoot: ${_e.message}`);

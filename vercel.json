@@ -1,11 +1,3 @@
 {
-  "version": 2,
-  "root": "api",
-  "buildCommand": "npm run build:web",
-  "env": {
-    "DATABASE_URL": "postgres://postgres:JYVYbtjOOEHlp9saDdhTEhdZJwsE1/Mn@mixbtfnjdzmfbctkxnwk.supabase.co:5432/postgres?sslmode=require",
-    "JWT_SECRET": "416da02a0628758bd926a9fdd9c08204ad0bdad60d5714a2c9b11e16ce8c1df5ef201e7c01775d6ba6d17dea4ab221f2",
-    "NODE_ENV": "production",
-    "CORS_ORIGINS": "https://app.nesportsfoundation.in,https://nesf-core.vercel.app,http://localhost:3000,http://localhost:4000"
-  }
+  "version": 2
 }

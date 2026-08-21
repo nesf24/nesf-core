@@ -4,6 +4,11 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import rateLimit from 'express-rate-limit';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 import pool from './db.js';
 import authRoutes from './routes/auth.js';

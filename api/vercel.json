@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "npm run build:web",
   "installCommand": "npm install",
   "env": {
     "DATABASE_URL": "postgres://postgres:JYVYbtjOOEHlp9saDdhTEhdZJwsE1/Mn@mixbtfnjdzmfbctkxnwk.supabase.co:5432/postgres?sslmode=require",

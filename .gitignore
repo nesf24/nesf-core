@@ -1,39 +1,129 @@
-# --- secrets ---
+# --- CRITICAL: Secrets & Credentials ---
+# Environment variables with real credentials MUST NEVER be committed
 .env
 .env.local
+.env.*.local
 .env.production
+.env.staging
+.env.supabase
+.env.supabase.local
+.env.supabase.*.local
+
+# Android signing credentials
 *.jks
 *.keystore
+*.p12
 key.properties
+key.properties.local
+debug.keystore
+
+# API keys and tokens (if mistakenly placed here)
+*.pem
+*.key
+private.key
+
+# Local overrides (never commit)
+.env.local.override
+secrets.json
+.local/
 
 # --- api ---
-node_modules/
-npm-debug.log*
+api/node_modules/
+api/npm-debug.log*
+api/yarn-error.log*
+api/.npmrc
 # Locally-stored selfies, signatures and receipts (production uses Cloud Storage)
 api/uploads/
+api/uploads/**/*.jpg
+api/uploads/**/*.png
 # The Flutter web build, copied in by `npm run build:web`
-api/public/
+# Committed to repo for Vercel deployment
+# IDE and editor
+api/.idea/
+api/.vscode/
+api/*.swp
 
 # --- flutter ---
 app/.dart_tool/
 app/.flutter-plugins
 app/.flutter-plugins-dependencies
 app/build/
+
+# iOS build artifacts
 app/ios/Pods/
 app/ios/Flutter/Flutter.framework
 app/ios/Flutter/Generated.xcconfig
 app/ios/Flutter/flutter_export_environment.sh
+app/ios/Flutter/ephemeral/
+app/.symlinks/
+app/Flutter/Flutter.podspec
+
+# Android build artifacts
 app/android/.gradle/
 app/android/local.properties
 app/android/app/debug/
 app/android/app/profile/
 app/android/app/release/
+app/android/app/outputs/
+app/android/.idea/
+app/android/*.iml
 
-# --- os / editor ---
+# APK files (generated, not version controlled)
+*.apk
+*.aab
+app/**/*.apk
+app/build/outputs/**/*.apk
+
+# --- OS & Editor ---
 .DS_Store
 Thumbs.db
 *.swp
+*.swo
+*~
 .idea/
 .vscode/
+*.iml
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
+# Temporary files
+*.tmp
+.cache/
+.temp/
+tmp/
+
+# OS X
+.AppleDouble
+.LSOverride
+
+# Windows
+.exe
+.lnk
+
+# --- Deployment & Build ---
 .vercel
+.next/
+dist/
+out/
+.netlify
+
+# --- Logs ---
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Development ---
+.env.test
+test-results/
+
+# --- Documentation (local versions) ---
+docs/.local
+docs/temp/

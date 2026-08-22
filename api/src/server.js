@@ -132,11 +132,35 @@ try {
 }
 
 // Serve static files from public folder (Flutter web build)
-// Priority: resolved webRoot > Vercel path > fallback disabled
-const publicPath = webRoot || path.resolve(path.join(process.cwd(), 'api', 'public'));
-const publicExists = fs.existsSync(path.join(publicPath, 'index.html'));
+// Try multiple approaches to find the public folder
+let publicPath = null;
 
-console.log(`[nesf-core-api] Static files path: ${publicPath}`);
+if (webRoot) {
+  publicPath = webRoot;
+  console.log(`[nesf-core-api] Using resolved webRoot: ${publicPath}`);
+} else {
+  // Vercel: cwd is /var/task, files are in /var/task/api/public
+  const vercelPath = path.resolve(path.join(process.cwd(), 'api', 'public'));
+  const cwdPath = path.resolve(path.join(process.cwd(), 'public'));
+
+  console.log(`[nesf-core-api] Attempting Vercel path: ${vercelPath}`);
+  console.log(`[nesf-core-api] Attempting cwd path: ${cwdPath}`);
+
+  if (fs.existsSync(path.join(vercelPath, 'index.html'))) {
+    publicPath = vercelPath;
+    console.log(`[nesf-core-api] ✅ Found public folder at Vercel path`);
+  } else if (fs.existsSync(path.join(cwdPath, 'index.html'))) {
+    publicPath = cwdPath;
+    console.log(`[nesf-core-api] ✅ Found public folder at cwd path`);
+  } else {
+    console.log(`[nesf-core-api] ❌ Could not find index.html at any path`);
+    console.log(`[nesf-core-api] cwd: ${process.cwd()}`);
+    console.log(`[nesf-core-api] __dirname: ${__dirname}`);
+  }
+}
+
+const publicExists = publicPath && fs.existsSync(path.join(publicPath, 'index.html'));
+console.log(`[nesf-core-api] Final public path: ${publicPath}`);
 console.log(`[nesf-core-api] index.html exists: ${publicExists}`);
 
 if (publicExists) {

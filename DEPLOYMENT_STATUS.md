@@ -121,24 +121,33 @@ DATABASE_URL='postgres://nesf_core:NEsf%40Core2026%23Prod%21Secure@localhost:543
 
 ## 🎯 Credentials & Secrets
 
+⚠️ **CRITICAL:** The credentials below have been EXPOSED in git history and MUST be rotated immediately.
+See `SECURITY.md` for rotation procedures.
+
 ### Database
 - **Host:** Cloud SQL (via Unix socket in production)
 - **Database:** `nesf_core`
 - **User:** `nesf_core`
-- **Password:** `NEsf@Core2026#Prod!Secure`
-- **Stored in Secret Manager:** ✓ `nesf-core-db-password`
+- **Password:** `[REDACTED - EXPOSED IN GIT]` ⚠️
+- **Action Required:** Change to new password in Cloud SQL console
+- **Stored in Secret Manager:** ✓ `nesf-core-db-password` (update with new value)
 
 ### JWT
-- **Secret:** `ce7b5514d34f9d9f443919c94a13dd7da98c7f02a01610ce8c446040b628afdcefee4665233a022242d0c2436cd74b77`
-- **Stored in Secret Manager:** ✓ `nesf-core-jwt-secret`
+- **Secret:** `[REDACTED - EXPOSED IN GIT]` ⚠️
+- **Action Required:** Generate new secret, rotate in Secret Manager
+- **Stored in Secret Manager:** ✓ `nesf-core-jwt-secret` (update with new value)
+- **Impact:** All existing tokens become invalid, users must re-login
 
 ### Admin Account (to seed)
 - **Email:** `biki@nesportsfoundation.in`
-- **Initial Password:** `ChangeMe@123` (MUST change immediately)
+- **Password:** `[REDACTED - EXPOSED IN GIT]` ⚠️
+- **Action Required:** CHANGE IMMEDIATELY after login
+- **Note:** Initial password exposed in multiple git commits
 
 ### Service Account
 - **Account:** `534418799516-compute@developer.gserviceaccount.com`
 - **Permissions:** Secret access, Cloud SQL client, Cloud Storage access
+- **Security:** Verify no additional permissions granted without authorization
 
 ---
 

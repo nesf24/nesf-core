@@ -1,0 +1,193 @@
+================================================================================
+                        ⭐ START HERE ⭐
+                   PHASE 1 DEPLOYMENT - FINAL INSTRUCTIONS
+================================================================================
+
+Everything is prepared. You now have 2 options to complete deployment.
+
+================================================================================
+                    OPTION 1: EASIEST (Recommended)
+================================================================================
+
+1. On your local machine, navigate to: D:\new app\nesf-core\
+
+2. Double-click this file: RUN_ME_FIRST.bat
+
+3. It will:
+   ✅ Open PowerShell
+   ✅ Run the deployment script
+   ✅ Show you your credentials
+   ✅ Tell you the next manual steps
+
+4. Follow the on-screen instructions
+
+Time: ~20 minutes total
+
+================================================================================
+                    OPTION 2: MANUAL POWERSHELL
+================================================================================
+
+1. Open PowerShell
+
+2. Run this command:
+   cd "D:\new app\nesf-core"
+   .\FINAL_DEPLOYMENT_SCRIPT.ps1
+
+3. Follow the on-screen instructions
+
+Time: ~20 minutes total
+
+================================================================================
+                       WHAT YOU'LL SEE
+================================================================================
+
+The deployment will:
+
+1. Check gcloud installation
+2. Ask you to authenticate (browser will open)
+3. You sign in with: biki@nesportsfoundation.in
+4. Click "Allow" to approve
+5. Come back to PowerShell
+6. Script updates Secret Manager
+7. Script deploys to Cloud Run (2-3 minutes)
+8. Script verifies production health
+9. Script shows you credentials and next steps
+
+Total: ~20 minutes (mostly waiting for deployment)
+
+================================================================================
+                    YOUR 4 FINAL CREDENTIALS
+================================================================================
+
+Database Password:
+  JYVYbtjOOEHlp9saDdhTEhdZJwsE1/Mn
+
+JWT Secret:
+  416da02a0628758bd926a9fdd9c08204ad0bdad60d5714a2c9b11e16ce8c1df5ef201e7c01775d6ba6d17dea4ab221f2
+
+Admin Account:
+  biki@nesportsfoundation.in / h5t/PaNtGRlEGflS
+
+Keystore Password:
+  5QsZpICYIz2ZCk6z6Di7hLet1ot97Re3
+
+================================================================================
+                      AFTER DEPLOYMENT COMPLETES
+================================================================================
+
+The script will tell you to do 2 more things (5 minutes):
+
+1. Update Supabase password
+   → https://app.supabase.com
+   → Settings > Database > Users > postgres > Reset Password
+   → Use: JYVYbtjOOEHlp9saDdhTEhdZJwsE1/Mn
+
+2. Update Cloud SQL password
+   → https://console.cloud.google.com/sql/instances
+   → thenesports-db > Users > postgres > Edit
+   → Use: JYVYbtjOOEHlp9saDdhTEhdZJwsE1/Mn
+
+3. Test login
+   → https://app.nesportsfoundation.in/
+   → Email: biki@nesportsfoundation.in
+   → Password: h5t/PaNtGRlEGflS
+   → Change password immediately
+
+================================================================================
+                       QUICK CHECKLIST
+================================================================================
+
+Before starting:
+  [ ] You're on your local machine (not this cloud IDE)
+  [ ] You have PowerShell open or will double-click RUN_ME_FIRST.bat
+  [ ] You have internet connection
+  [ ] You have a browser ready
+
+During deployment:
+  [ ] Script runs
+  [ ] Browser opens for gcloud auth
+  [ ] You approve access
+  [ ] Script continues and deploys
+  [ ] Deployment takes 2-3 minutes
+
+After deployment:
+  [ ] Update Supabase password (5 min)
+  [ ] Update Cloud SQL password (5 min)
+  [ ] Test login (2 min)
+  [ ] Change admin password
+
+Complete:
+  [ ] Phase 1 DONE ✅
+
+================================================================================
+                    WHICH FILE TO RUN?
+================================================================================
+
+Choose ONE:
+
+A) EASIEST (Just double-click):
+   → RUN_ME_FIRST.bat
+
+B) Manual PowerShell:
+   → Run: cd "D:\new app\nesf-core"
+   → Run: .\FINAL_DEPLOYMENT_SCRIPT.ps1
+
+Both do the same thing - choose whichever you prefer.
+
+================================================================================
+                     WHAT IF IT DOESN'T WORK?
+================================================================================
+
+If you see an error about gcloud:
+  → Run: gcloud auth login
+  → Sign in with: biki@nesportsfoundation.in
+  → Then run the script again
+
+If you see an error about PowerShell version:
+  → Make sure you have PowerShell 5.0 or newer
+  → Run: $PSVersionTable.PSVersion
+
+If the script hangs on authentication:
+  → The browser should open automatically
+  → If not, it will show you a URL to visit manually
+  → Follow the URL in the browser
+  → Then return to PowerShell
+
+================================================================================
+                         YOUR NEXT ACTION
+================================================================================
+
+👉 DO ONE OF THESE NOW:
+
+Option A: Double-click this file
+   → RUN_ME_FIRST.bat
+
+Option B: Open PowerShell and run:
+   → cd "D:\new app\nesf-core"
+   → .\FINAL_DEPLOYMENT_SCRIPT.ps1
+
+That's it! Everything else is automated.
+
+================================================================================
+                    REFERENCE FILES
+================================================================================
+
+If you need more info while running:
+
+- PHASE1_FINAL_SUMMARY.txt - Complete overview and checklist
+- FINAL_DEPLOYMENT_SCRIPT.ps1 - The script (already configured)
+- FINAL_CREDENTIALS_AND_DEPLOYMENT.txt - Manual command reference
+- SECURITY.md - Security policy and procedures
+
+All the credentials you need are above and in those files.
+
+================================================================================
+
+Ready? Pick an option above and start!
+
+If you have any issues, check the troubleshooting section or refer to
+PHASE1_FINAL_SUMMARY.txt for detailed help.
+
+Good luck! Phase 1 deployment is about to begin. ✅
+
+================================================================================

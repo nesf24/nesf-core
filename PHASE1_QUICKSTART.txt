@@ -1,0 +1,226 @@
+================================================================================
+                    NESF CORE PHASE 1: SECURITY HARDENING
+                              QUICK REFERENCE
+================================================================================
+
+STATUS: ✅ 50% COMPLETE - Local hardening done, credential rotation pending
+
+TIME TO COMPLETE: ~2 hours for credential rotation
+
+RISK IF NOT DONE: 🔴 CRITICAL - Database breach, forged tokens, app compromise
+
+================================================================================
+                            WHAT WAS JUST DONE ✅
+================================================================================
+
+✅ Created SECURITY.md - Complete security policy & procedures
+✅ Created SECURITY_REMEDIATION.md - Step-by-step instructions
+✅ Created .env.example - Safe template without passwords
+✅ Redacted .env files - Replaced passwords with "CHANGE_PASSWORD_IMMEDIATELY"
+✅ Fixed build.gradle.kts - No longer has hardcoded keystore password
+✅ Enhanced .gitignore - Added secret file patterns
+✅ Created key.properties.example - Android keystore template
+
+================================================================================
+                        YOUR ACTION ITEMS (TODAY)
+================================================================================
+
+STEP 1: ROTATE SUPABASE PASSWORD (5 minutes)
+────────────────────────────────────────────
+  Current:  NEsports@#2026
+  Location: .env.supabase, .env, git history
+  Action:   Log in to https://app.supabase.com
+            Settings > Database > Users > postgres > Reset Password
+  Update:   Edit api/.env.supabase with new password
+  Verify:   cd api && npm run migrate  (should succeed)
+
+STEP 2: ROTATE CLOUD SQL PASSWORD (5 minutes)
+──────────────────────────────────────────────
+  Current:  NEsf@Core2026#Prod!Secure
+  Location: DEPLOYMENT_STATUS.md, git history
+  Action:   gcloud sql users set-password postgres \
+              --instance=thenesports-db \
+              --password=<new-password> \
+              --project=thenesports-api-prod
+  Update:   Google Secret Manager: nesf-core-db-password
+  Impact:   Production database password changes
+
+STEP 3: ROTATE JWT SECRET (5 minutes)
+──────────────────────────────────────
+  Current:  de1d34de38b1a41f344751de4405276de8b9e3a82bbf7665a652b190635b8cfa...
+  Location: .env.supabase, DEPLOYMENT_STATUS.md, git history
+  Generate: node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+  Update:   Google Secret Manager: nesf-core-jwt-secret
+  Impact:   All existing tokens INVALID - users logged out, must re-login
+
+STEP 4: CHANGE ADMIN PASSWORD (5 minutes)
+───────────────────────────────────────────
+  Current:  ChangeMe@123
+  Location: .env, DEPLOYMENT_STATUS.md, git history
+  Action:   After JWT rotated, login and change password via API or database
+  Impact:   Admin account only
+
+STEP 5: CREATE key.properties FILE (5 minutes)
+───────────────────────────────────────────────
+  Location: app/android/key.properties (NOT committed)
+  Copy:     cp app/android/key.properties.example app/android/key.properties
+  Edit:     Fill in actual keystore passwords
+  Test:     cd app && flutter build apk --release
+  Impact:   Android APK signing
+
+STEP 6: VERIFY EVERYTHING WORKS (10 minutes)
+──────────────────────────────────────────────
+  [ ] npm start              - API server starts
+  [ ] npm run migrate        - Database migration succeeds
+  [ ] npm run seed           - Seed data loads
+  [ ] Login works            - Can authenticate with new credentials
+  [ ] APK builds             - flutter build apk --release succeeds
+
+TOTAL TIME: ~2 hours (mostly waiting for commands to complete)
+
+================================================================================
+                        OPTIONAL: CLEAN GIT HISTORY
+================================================================================
+
+These exposed credentials are still in git history. You can:
+
+OPTION A: Leave as-is (repository is private anyway)
+  ✅ Saves time
+  ✅ Avoids git rewrite complexity
+  ❌ Credentials still in git if repo ever goes public
+
+OPTION B: Clean with BFG (Recommended)
+  ✅ Removes all traces of exposed secrets
+  ❌ Requires force-push
+  ❌ All team members must re-clone
+  Time: ~30 minutes
+  Instructions: SECURITY_REMEDIATION.md, Phase C
+
+OPTION C: Clean with git-filter-branch
+  ✅ Built into git (no extra tools needed)
+  ❌ More complex and error-prone
+  ❌ Requires force-push
+  ❌ All team members must re-clone
+  Time: ~30 minutes
+  Instructions: SECURITY_REMEDIATION.md, Phase C
+
+RECOMMENDATION: Do Option B (BFG) this week for maximum security
+
+================================================================================
+                            FILES TO READ
+================================================================================
+
+📄 SECURITY_REMEDIATION.md   - Detailed step-by-step instructions
+                              - Phases A, B, C, D, E, F
+                              - Rollback plans
+                              - Troubleshooting
+
+📄 SECURITY.md               - Complete security policy
+                              - Authentication & authorization
+                              - Data protection
+                              - Incident response
+                              - Best practices
+
+📄 SECURITY_STATUS.md        - Current status & progress tracking
+                              - What's done
+                              - What's pending
+                              - Timeline
+
+📄 .env.example              - Safe template for local development
+📄 .env.supabase.example     - Safe template for Supabase
+📄 key.properties.example    - Safe template for Android signing
+
+================================================================================
+                          DEPLOYMENT TIMELINE
+================================================================================
+
+TODAY (2026-08-15):
+  [ ] Rotate all passwords & secrets
+  [ ] Create key.properties
+  [ ] Test locally
+
+THIS WEEK:
+  [ ] Optional: Clean git history with BFG
+  [ ] Deploy new secrets to Cloud Run
+  [ ] Test production health check
+
+BEFORE NEXT RELEASE:
+  [ ] Build new APK (if keystore regenerated)
+  [ ] Upload to Play Store Internal Testing
+  [ ] Monitor logs for 24 hours
+
+================================================================================
+                        WHAT HAPPENS NEXT?
+================================================================================
+
+After Phase 1 Security Hardening is complete, we'll move to:
+
+PHASE 2: DATABASE SCHEMA VERIFICATION (1 day)
+  - Verify all tables exist
+  - Test migrations
+  - Document schema
+
+PHASE 3: WEB DEPLOYMENT SETUP (1 day)
+  - Configure for app.nesportsfoundation.in
+  - PWA / service worker setup
+  - CORS configuration
+
+PHASE 4: CODE ORGANIZATION (1 day)
+  - Remove APK files from repository
+  - Clean up directory structure
+
+PHASE 5: TESTING & CI/CD (2 days)
+  - Add unit tests
+  - Configure automated testing
+
+PHASE 6: MOBILE DISTRIBUTION (3 days)
+  - Play Store setup & release
+  - TestFlight & App Store
+
+PHASE 7: DOCUMENTATION (1 day)
+  - Architecture docs
+  - Deployment guides
+
+PHASE 8: VERIFICATION & GO-LIVE (1 day)
+  - Pre-deployment checklist
+  - Production verification
+
+TOTAL: 12 days to full-stack completion
+
+================================================================================
+                        QUESTIONS OR STUCK?
+================================================================================
+
+1. Check SECURITY_REMEDIATION.md first
+2. Check the specific Phase section (A-F)
+3. Look for your error in "Troubleshooting" section
+4. If still stuck, review SECURITY.md for context
+
+KEY COMMANDS REFERENCE:
+────────────────────────
+# Generate new JWT
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+
+# Test database connection
+npm run migrate
+
+# Test seed data
+npm run seed
+
+# View git history for secrets
+git log -p -- api/.env | grep -i password
+
+# Build APK
+flutter build apk --release
+
+# Deploy to Cloud Run
+gcloud run deploy nesf-core-api --region=asia-south1 --project=thenesports-api-prod
+
+================================================================================
+
+STATUS: 🟡 IN PROGRESS (LOCAL) - Awaiting credential rotation before Phase 2
+
+LAST UPDATED: 2026-08-15
+NEXT CHECK-IN: After credential rotation complete
+
+================================================================================

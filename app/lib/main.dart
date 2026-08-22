@@ -70,13 +70,14 @@ class _NesfCoreAppState extends State<NesfCoreApp> {
       child: Builder(
         builder: (context) {
           final router = buildRouter(_auth);
-          return SplashOverlay(
-            child: MaterialApp.router(
-              title: 'NESF Core',
-              debugShowCheckedModeBanner: false,
-              theme: buildNesfTheme(),
-              routerConfig: router,
-            ),
+          return MaterialApp.router(
+            title: 'NESF Core',
+            debugShowCheckedModeBanner: false,
+            theme: buildNesfTheme(),
+            routerConfig: router,
+            builder: (context, child) {
+              return SplashOverlay(child: child ?? const SizedBox.shrink());
+            },
           );
         },
       ),

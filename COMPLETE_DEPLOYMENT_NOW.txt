@@ -1,0 +1,204 @@
+================================================================================
+                   COMPLETE DEPLOYMENT - FINAL STEP
+                         2026-08-15
+================================================================================
+
+⏳ ALMOST DONE - One more step needed!
+
+The deployment script requires gcloud authentication. This is a one-time security
+verification that takes 30 seconds.
+
+================================================================================
+                     WHAT YOU NEED TO DO (Right Now)
+================================================================================
+
+1. AUTHENTICATE gcloud
+   ──────────────────
+
+   Open PowerShell and run:
+
+   gcloud auth login
+
+   This will:
+   - Open a browser window
+   - Ask you to sign in with your Google account
+   - Use: biki@nesportsfoundation.in
+   - Approve the permission (click "Allow")
+   - Browser will show "You are now authenticated!"
+   - Come back to PowerShell
+
+   Time: ~30 seconds
+
+2. THEN RUN THE DEPLOYMENT SCRIPT
+   ───────────────────────────────
+
+   Once authenticated, run:
+
+   cd "D:\new app\nesf-core"
+   .\RUN_DEPLOYMENT.ps1
+
+   The script will then automatically:
+   ✅ Update Google Secret Manager (database password)
+   ✅ Update Google Secret Manager (JWT secret)
+   ✅ Deploy to Cloud Run
+   ✅ Verify production
+
+   Time: ~5 minutes
+
+================================================================================
+                        COMPLETE STEP-BY-STEP
+================================================================================
+
+STEP 1: Authenticate gcloud (30 seconds)
+────────────────────────────────────────
+
+1. Open PowerShell (if not already open)
+
+2. Run this command:
+   gcloud auth login
+
+3. A browser window will open
+
+4. Sign in with: biki@nesportsfoundation.in
+
+5. Click "Allow" when it asks for permissions
+
+6. Wait for "You are now authenticated!" message
+
+7. Close browser, go back to PowerShell
+
+Total time: ~30 seconds
+
+────────────────────────────────────────────────────────────────────────────────
+
+STEP 2: Run deployment script (~5 minutes)
+──────────────────────────────────────────
+
+Now run the deployment script:
+
+   cd "D:\new app\nesf-core"
+   .\RUN_DEPLOYMENT.ps1
+
+The script will:
+
+   ✅ Update Secret Manager - Database Password
+      Verifying: JYVYbtjOOEHlp9saDdhTEhdZJwsE1/Mn
+
+   ✅ Update Secret Manager - JWT Secret
+      Verifying: 416da02a0628758bd926a9fdd9c08204ad...
+
+   ✅ Deploy to Cloud Run
+      Waiting for: "serving 100 percent of traffic"
+
+   ✅ Verify Production
+      Testing: https://app.nesportsfoundation.in/health
+      Expected: {"status":"ok"}
+
+────────────────────────────────────────────────────────────────────────────────
+
+STEP 3: Browser password updates (~5 minutes) - IMPORTANT!
+──────────────────────────────────────────────────────────
+
+⚠️  CRITICAL: The script only updates Secret Manager and deploys.
+    You MUST also update the database passwords in:
+
+1. Supabase (https://app.supabase.com)
+   - Settings > Database > Users > postgres > Reset Password
+   - Use: JYVYbtjOOEHlp9saDdhTEhdZJwsE1/Mn
+
+2. Cloud SQL (https://console.cloud.google.com/sql/instances)
+   - thenesports-db > Users > postgres > Edit
+   - Use: JYVYbtjOOEHlp9saDdhTEhdZJwsE1/Mn
+
+This synchronizes the password everywhere.
+
+────────────────────────────────────────────────────────────────────────────────
+
+STEP 4: Test login (~2 minutes)
+───────────────────────────────
+
+After all steps above are complete:
+
+1. Go to: https://app.nesportsfoundation.in/
+2. Login with:
+   Email: biki@nesportsfoundation.in
+   Password: h5t/PaNtGRlEGflS
+3. Should succeed ✅
+4. Change password immediately (use Profile Settings)
+
+────────────────────────────────────────────────────────────────────────────────
+
+TOTAL TIME: ~15 minutes
+
+1. Authenticate gcloud: 1 min
+2. Run deployment script: 5 min
+3. Update Supabase & Cloud SQL passwords: 5 min
+4. Test login: 2 min
+5. Delete credentials file: 1 min
+
+================================================================================
+                        COMMANDS TO RUN
+================================================================================
+
+AUTHENTICATION (One-time):
+
+   gcloud auth login
+
+────────────────────────────────────────────────────────────────────────────────
+
+DEPLOYMENT:
+
+   cd "D:\new app\nesf-core"
+   .\RUN_DEPLOYMENT.ps1
+
+────────────────────────────────────────────────────────────────────────────────
+
+MANUAL VERIFICATION (if script fails):
+
+   # Check health
+   curl https://app.nesportsfoundation.in/health
+
+   # Check logs
+   gcloud run services logs read nesf-core-api --region=asia-south1 --project=thenesports-api-prod --limit=20
+
+================================================================================
+                          YOU ARE HERE
+================================================================================
+
+✅ Phase 1: Credentials generated
+✅ Phase 1: Config files updated
+✅ Phase 1: Deployment script ready
+⏳ Phase 1: Awaiting gcloud authentication + script execution
+
+⏳ YOU: Run: gcloud auth login
+⏳ YOU: Run: .\RUN_DEPLOYMENT.ps1
+⏳ YOU: Update Supabase & Cloud SQL passwords
+⏳ YOU: Test login
+
+================================================================================
+                          KEY CREDENTIALS
+================================================================================
+
+Database Password:
+  JYVYbtjOOEHlp9saDdhTEhdZJwsE1/Mn
+  (Use in Supabase, Cloud SQL, Secret Manager)
+
+JWT Secret:
+  416da02a0628758bd926a9fdd9c08204ad0bdad60d5714a2c9b11e16ce8c1df5ef201e7c01775d6ba6d17dea4ab221f2
+  (Already in Secret Manager after script runs)
+
+Admin Account:
+  biki@nesportsfoundation.in / h5t/PaNtGRlEGflS
+  (Temporary - change after first login)
+
+================================================================================
+
+Next action: Open PowerShell and run:
+
+gcloud auth login
+
+Then run:
+
+.\RUN_DEPLOYMENT.ps1
+
+================================================================================

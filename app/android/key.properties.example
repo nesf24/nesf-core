@@ -1,0 +1,24 @@
+# Android Keystore Configuration Template
+# IMPORTANT: This file is gitignored and should never be committed
+# Rename to key.properties and fill in your actual values
+
+# Keystore File Path
+storeFile=../nesf-core-key.jks
+
+# Keystore Password
+# Get from: Generate a new keystore with keytool or your build system
+# DO NOT use: nesf_core_2026 (this is exposed and must be changed)
+storePassword=YOUR_KEYSTORE_PASSWORD_HERE
+
+# Key Alias (specific key within the keystore)
+keyAlias=nesf-core-key
+
+# Key Password (password for the specific key)
+# Often same as storePassword
+keyPassword=YOUR_KEY_PASSWORD_HERE
+
+# Example how to generate a new keystore:
+# keytool -genkey -v -keystore nesf-core-key.jks \
+#   -keyalg RSA -keysize 2048 -validity 10000 \
+#   -alias nesf-core-key -keypass <YOUR_KEY_PASSWORD> \
+#   -storepass <YOUR_KEYSTORE_PASSWORD>

@@ -95,15 +95,16 @@ try {
   // Try hardcoded paths first (most specific to least specific)
   // __dirname is always /app/src in Cloud Run, /absolute/path/to/api/src locally
   const possiblePaths = [
+    // Vercel: cwd is repo root, api is in api/ directory
+    path.resolve(path.join(process.cwd(), 'api', 'public')),
     // Cloud Run: __dirname=/app/src, need /app/public
     path.resolve(path.join(__dirname, '../public')),
-    // Local development: __dirname=.../api/src, might be launched from root
-    path.resolve(path.join(__dirname, '../../public')),
-    // Local development: launched from api/ directory
+    // Local development: __dirname=.../api/src, launched from api/ directory
     path.resolve(path.join(__dirname, '../public')),
-    // Fallback: relative to cwd
+    // Local development: __dirname=.../api/src, launched from root
+    path.resolve(path.join(__dirname, '../../public')),
+    // Fallback: relative to cwd (if cwd is api/ directory)
     path.resolve(path.join(process.cwd(), 'public')),
-    path.resolve(path.join(process.cwd(), 'api', 'public')),
   ];
 
   for (const p of possiblePaths) {

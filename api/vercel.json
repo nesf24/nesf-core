@@ -10,15 +10,32 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/health", "destination": "/health" },
+    { "source": "/canvaskit/(.*)", "destination": "/canvaskit/$1" },
+    { "source": "/assets/(.*)", "destination": "/assets/$1" },
+    { "source": "/icons/(.*)", "destination": "/icons/$1" },
+    { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|wasm|json|ico))", "destination": "/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
-      "source": "/public/canvaskit/(.*)\\.wasm",
+      "source": "/canvaskit/(.*)\\.wasm",
       "headers": [
         {
           "key": "Content-Type",
           "value": "application/wasm"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         }
       ]
     }

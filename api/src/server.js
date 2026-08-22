@@ -131,19 +131,28 @@ try {
   console.error(`[nesf-core-api] Error resolving webRoot: ${_e.message}`);
 }
 
-if (webRoot && fs.existsSync(path.join(webRoot, 'index.html'))) {
-  // Explicitly serve index.html at root
+// Serve static files from public folder (Flutter web build)
+// Priority: resolved webRoot > Vercel path > fallback disabled
+const publicPath = webRoot || path.resolve(path.join(process.cwd(), 'api', 'public'));
+const publicExists = fs.existsSync(path.join(publicPath, 'index.html'));
+
+console.log(`[nesf-core-api] Static files path: ${publicPath}`);
+console.log(`[nesf-core-api] index.html exists: ${publicExists}`);
+
+if (publicExists) {
+  // Explicitly serve index.html at root for SPA routing
   app.get('/', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     try {
-      res.sendFile(path.join(webRoot, 'index.html'));
+      res.sendFile(path.join(publicPath, 'index.html'));
     } catch (err) {
       console.error('[root handler error]', err.message);
       res.status(500).json({ error: 'Failed to serve index.html: ' + err.message });
     }
   });
 
-  app.use(express.static(webRoot, {
+  // Serve all static assets from public folder
+  app.use(express.static(publicPath, {
     index: false,
     // Flutter fingerprints its assets, but index.html and the service worker
     // must never be cached or staff keep loading an old build after a deploy.
